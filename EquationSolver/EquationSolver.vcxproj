@@ -167,6 +167,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EquationSolver.hpp" />
+    <ClInclude Include="src\util\FinishedOperation.hpp" />
+    <ClInclude Include="src\util\InProgressOperation.hpp" />
+    <ClInclude Include="src\util\operators\binary\BinaryOperatorBase.hpp" />
+    <ClInclude Include="src\util\operators\unary\UnaryOperatorBase.hpp" />
+    <ClInclude Include="src\util\Parse.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
