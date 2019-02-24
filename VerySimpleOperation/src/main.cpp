@@ -7,25 +7,31 @@ using std::string;
 int OperationAdd(int const a, int const b) { return a + b; }
 int OperationSubtract(int const a, int const b) { return a - b; }
 int OperationMultiply(int const a, int const b) { return a * b; }
-int OperatioDivide(int const a, int const b) { return a / b; }
+int OperationDivide(int const a, int const b) { return a / b; }
+int OperationMod(int const a, int const b) { return a%b; }
+int OperationPow(int const a, int const b) { return pow(a, b); }
 
 static std::map<char, std::function<int(int, int)>> OperatorMap()
 {
 	std::map<char, std::function<int(int, int)>> operatorMap;
 	operatorMap['*'] = OperationMultiply;
-	operatorMap['/'] = OperatioDivide;
+	operatorMap['/'] = OperationDivide;
 	operatorMap['+'] = OperationAdd;
 	operatorMap['-'] = OperationSubtract;
+	operatorMap['%'] = OperationMod;
+	operatorMap['^'] = OperationPow;
 	return operatorMap;
 }
 
 enum class Precedence : int
 {
+	Power,
 	Multiply,
 	Divide,
+	Mod,
 	Add,
 	Subtract,
-	Num = 4
+	Num = 6
 };
 enum class PrecedenceCharacter : char
 {
@@ -33,7 +39,9 @@ enum class PrecedenceCharacter : char
 	Divide = '/',
 	Add = '+',
 	Subtract = '-',
-	Num = 4
+	Mod = '%',
+	Power = '^',
+	Num = 6
 };
 
 static std::map<PrecedenceCharacter, Precedence> PrecedenceMap()
@@ -43,6 +51,8 @@ static std::map<PrecedenceCharacter, Precedence> PrecedenceMap()
 	precedenceMap[PrecedenceCharacter::Divide] = Precedence::Divide;
 	precedenceMap[PrecedenceCharacter::Add] = Precedence::Add;
 	precedenceMap[PrecedenceCharacter::Subtract] = Precedence::Subtract;
+	precedenceMap[PrecedenceCharacter::Power] = Precedence::Power;
+	precedenceMap[PrecedenceCharacter::Mod] = Precedence::Mod;
 	return precedenceMap;
 }
 
@@ -90,7 +100,7 @@ int Parse(string& eqn, int& output, int steps = -1)
 	 */
 	if (steps == -1)
 	{
-		while (Parse(eqn, output, 0) == 0) {}
+		while (Parse(eqn, output, 1) == 0) {}
 	}
 	else if (steps != 0)
 	{
@@ -255,11 +265,13 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		str = "1*4+(1*(2-62)+100)-30/(2+2*5)+100/20-30+60*2-5";
+		str = "1*4+(1*(2-62)+100)^2-30/(2^3+2*5)+100/20-30+60*2-5%2%30";
 	}
+	// BUG: parenthesis at beginning of string causes error
+	// BUG: minus sign at beginning of string causes error
 	int output;
 	std::cout << str << std::endl;
-	while (Parse(str, output, 0) == 0)
+	while (Parse(str, output, 1) == 0)
 	{
 		std::cout << str << std::endl;
 	}
