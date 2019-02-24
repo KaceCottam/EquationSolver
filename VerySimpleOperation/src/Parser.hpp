@@ -1,5 +1,5 @@
 /*
- * Author: Kace Cottam
+ * Author: Kace Cottam, Maia Whitley
  * Section: CPTS 122, CCHackathon
  * Date: Sunday, February 24, 2019
  * Description:
