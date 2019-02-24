@@ -129,7 +129,7 @@ protected:
 	{
 		const auto isNumber = [](char c)
 		{
-			return c >= '0' && c <= '9';
+			return c >= '0' && c <= '9' || c == '.';
 		};
 		for (auto i = 0; i < in.length(); i++)
 		{
@@ -157,9 +157,9 @@ public:
 };
 int main()
 {
-	DoubleParser parser;
-	std::string input = "sqrt(100^2+3)";
-	double output;
+	IntParser parser;
+	std::string input = "5*4-(30/2)^2+1992/7";
+	int output;
 	do
 	{
 		std::cout << input << std::endl;
