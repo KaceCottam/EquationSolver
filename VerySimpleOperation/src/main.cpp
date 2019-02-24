@@ -2,24 +2,32 @@
 #include <iostream>
 #include <map>
 #include <functional>
+#include <vector>
 using std::string;
 
-int OperationAdd(int const a, int const b) { return a + b; }
-int OperationSubtract(int const a, int const b) { return a - b; }
-int OperationMultiply(int const a, int const b) { return a * b; }
-int OperationDivide(int const a, int const b) { return a / b; }
-int OperationMod(int const a, int const b) { return a%b; }
-int OperationPow(int const a, int const b) { return pow(a, b); }
+template<typename T>
+T OperationAdd(T const a, T const b) { return a + b; }
+template<typename T>
+T OperationSubtract(T const a, T const b) { return a - b; }
+template<typename T>
+T OperationMultiply(T const a, T const b) { return a * b; }
+template<typename T>
+T OperationDivide(T const a, T const b) { return a / b; }
+template<typename T>
+T OperationMod(T const a, T const b) { return (int)a%(int)b; }
+template<typename T>
+T OperationPow(T const a, T const b) { return pow(a, b); }
 
-static std::map<char, std::function<int(int, int)>> OperatorMap()
+template<typename T>
+static std::map<char, std::function<T(T, T)>> OperatorMap()
 {
-	std::map<char, std::function<int(int, int)>> operatorMap;
-	operatorMap['*'] = OperationMultiply;
-	operatorMap['/'] = OperationDivide;
-	operatorMap['+'] = OperationAdd;
-	operatorMap['-'] = OperationSubtract;
-	operatorMap['%'] = OperationMod;
-	operatorMap['^'] = OperationPow;
+	std::map<char, std::function<T(T, T)>> operatorMap;
+	operatorMap['*'] = OperationMultiply<T>;
+	operatorMap['/'] = OperationDivide<T>;
+	operatorMap['+'] = OperationAdd<T>;
+	operatorMap['-'] = OperationSubtract<T>;
+	operatorMap['%'] = OperationMod<T>;
+	operatorMap['^'] = OperationPow<T>;
 	return operatorMap;
 }
 
@@ -56,44 +64,10 @@ static std::map<PrecedenceCharacter, Precedence> PrecedenceMap()
 	return precedenceMap;
 }
 
-struct Operator
-{
-	int type = 0;
-	union
-	{
-		struct Number
-		{
-			int data;
-		} Num;
-		struct Binary
-		{
-			std::function<int(int, int)> func;
-		} Bin;
-	};
-};
-
-std::istream& operator >> (std::istream& stream, Operator& op)
-{
-	char read;
-	read = stream.peek();
-	if (read >= '0' && read <= '9')
-	{
-		//Read is a number
-		stream >> op.Num.data;
-	}
-	else
-	{
-		//Read is a binary operator
-		char key;
-		stream >> key;
-		op.Bin.func = OperatorMap().find(key)->second;
-	}
-	return stream;
-}
-
 //returns 0 if working, 1 if done
-// precond: string is perfect
-int Parse(string& eqn, int& output, int steps = -1)
+// TODO: precond: string is perfect
+template<typename T>
+T Parse(string& eqn, T& output, int steps = -1)
 {
 	/*
 	 * Looping here
@@ -114,8 +88,8 @@ int Parse(string& eqn, int& output, int steps = -1)
 	{
 		string curr(eqn);
 
-		auto findParenthesis = eqn.find_last_of('(');
 		//find parenthesis
+		auto findParenthesis = eqn.find_last_of('(');
 		if (findParenthesis != string::npos)
 		{
 			string subEqnWithParen = &eqn[findParenthesis];
@@ -195,13 +169,13 @@ int Parse(string& eqn, int& output, int steps = -1)
 		if (operatorFound)
 		{
 			//DO OPERATION
-			std::function<int(int, int)> func = OperatorMap().find(operation)->second;
-			int right = atoi(curr.c_str() + operatorFoundIndex + 1);
+			std::function<T(T, T)> func = OperatorMap<T>().find(operation)->second;
+			T right = atoi(curr.c_str() + operatorFoundIndex + 1);
 			int rightIndex = operatorFoundIndex + 1;
 			int leftIndex = operatorFoundIndex - 1;
 			auto IsNumber = [](char c)
 			{
-				return c >= '0' && c <= '9' || c == '-';
+				return c >= '0' && c <= '9' || c == '-' || c == '.';
 			};
 			if (leftIndex < 0)
 			{
@@ -223,9 +197,9 @@ int Parse(string& eqn, int& output, int steps = -1)
 			if (!IsNumber(curr[leftIndex])) if (curr[leftIndex] != '-') ++leftIndex;
 			if (!IsNumber(curr[rightIndex])) --rightIndex;
 
-			int left = atoi(curr.c_str() + leftIndex);
+			T left = atoi(curr.c_str() + leftIndex);
 
-			int result = func(left, right);
+			T result = func(left, right);
 
 			curr[rightIndex] = '\0';
 
@@ -265,7 +239,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		str = "1*4+(1*(2-62)+100)^2-30/(2^3+2*5)+100/20-30+60*2-5%2%30";
+		str = "1*4+(1*(2-62)+100)^2-30/(2^3+2*5)+100/20-30+60*2-5*100-(50-34*23)+70";
 	}
 	// BUG: parenthesis at beginning of string causes error
 	// BUG: minus sign at beginning of string causes error
@@ -277,4 +251,5 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
+
 }
