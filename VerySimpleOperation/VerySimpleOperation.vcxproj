@@ -155,6 +155,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Matrix.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Matrix.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Parser.hpp" />
