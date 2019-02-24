@@ -1,20 +1,33 @@
-//#comment file
+/*
+ * Author: Kace Cottam
+ * Section: CPTS 122, CCHackathon
+ * Date: Sunday, February 24, 2019
+ * Description:
+ * 	This file contains a base class called "Parser" which handles parsing a string, 
+ * 	given the programmer overrides the pure virtual functions within.
+ */
+
 #pragma once
 #include <string>
 #include <unordered_map>
 #include <functional>
 #include <sstream>
 
-//#comment begin
+ /*
+  * The template is of any type. When inheriting this class, use `class NAME : public Parser<TYPE>`.
+  * Integers, for example, would be something like `class IntParser : public Parser<int>`
+  */
 template<class T>
 class Parser
-//#comment end
+
 {
 public:
 	Parser() = default;
 	virtual ~Parser() = default;
 protected:
-	//#comment
+	/*
+	 * This is used purely for unordered_map for pairs.
+	 */
 	struct pair_hash {
 		template <class T1, class T2>
 		std::size_t operator () (const std::pair<T1, T2> &p) const {
@@ -29,11 +42,29 @@ protected:
 	std::unordered_map<std::string, std::function<T(T&)>> UnaryOperators;
 	std::unordered_map<std::string, std::function<T(T&, T&)>> BinaryOperators;
 
-	//#comment
+	/*
+	 * This is a function that needs to be overridden. It is the algorithm your parser will use to find the correct data.
+	 * OUTPUT: {{data left of operator, data right of operator},{int leftIndex of whole discovery,int rightIndex of whole discovery}}
+	 * INPUTS:
+	 * 	index: index of the operator
+	 * 	in: the inputString
+	 * 	operation: a string showing what operation was found. It is recommended that you use length of this string to offset the start of the rightIndex.
+	 */
 	virtual std::pair<std::pair<T, T>, std::pair<int, int>> DiscoverInput(int index, std::string& in, std::string& operation) = 0;
-	//#comment
+	/*
+	 * This is a function that is called to check and reformat the inputString, in.
+	 */
 	virtual int CheckFunction(std::string& in) = 0;
-	//#comment
+	/*
+	 * This function does the heavy lifting. It evaluates a string.
+	 * To do this, it searches for operators that are registered.
+	 * It goes by this order: WrappingOperator, UnaryOperator, BinaryOperator.
+	 *
+	 * INPUTS:
+	 * 	inputString: The string you want to input. This cannot be a string literal as it is modified.
+	 * 	output: This is the final number. If there are wrapping operators, this will be set by their functions. Do not trust it!
+	 * 	steps: This is the number of steps the equation will do. Inside the class, use the integer enum to set this, or any number above 0.
+	 */
 	bool DoParse(std::string& inputString, T& output, int const steps = Infinite)
 	{
 		switch (steps)
@@ -186,19 +217,34 @@ protected:
 		}
 	}
 public:
-	//#comment
+	/*
+	 * This registers a unary operator.
+	 * inputs is the string that denotes it, the function is the operation that is done.
+	 * The function must return T, and it must take in a T reference.
+	 * This function is the unary operation you wish to perform. This can be inputted with lambda functions.
+	 */
 	int RegisterUnaryOperator(std::string const& inputs, std::function<T(T&)> const function)
 	{
 		UnaryOperators[std::string(inputs)] = function;
 		return 1;
 	}
-	//#comment
+	/*
+	 * This registers a binary operator. inputs is the string that denotes it, the function is the operation that is done.
+	 * The function must return T, and it must take in two T references.
+	 * The first reference is the left side of the operator, while the other one is the right.
+	 * This function is the binary operation you wish to perform. This can be inputted with lambda functions.
+	 */
 	int RegisterBinaryOperator(std::string const& inputs, std::function<T(T&, T&)> const function)
 	{
 		BinaryOperators[std::string(inputs)] = function;
 		return 1;
 	}
-	//#comment
+	/*
+	 * This registers a wrapping operator.
+	 * left is the left side, right is the right side, and the function is what is done.
+	 * With parenthesis, you would want them to evaluate first.
+	 * Therefore, the function is called with the string inside of parenthesis, with the output as the other parameter.
+	 */
 	int RegisterWrappingOperator(std::string const& left, std::string const& right, std::function<bool(std::string&, T&)> const function)
 	{
 		WrappingOperators[{left, right}] = function;
@@ -215,10 +261,12 @@ public:
 		Working = false,
 		Finished = true
 	};
-	//#comment begin
+	/*
+	 * This function is overrideable. It is what the programmer calls outside of the class.
+	 */
 	virtual bool Parse(std::string& inputString, T& output, int const steps = Infinite)
 	{
 		return DoParse(inputString, output, steps);
 	}
-	//#comment end
+
 };

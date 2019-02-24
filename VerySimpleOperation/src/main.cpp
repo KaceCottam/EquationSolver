@@ -21,7 +21,6 @@ public:
 protected:
 	std::pair<std::pair<int, int>, std::pair<int, int>> DiscoverInput(int index, std::string& in, std::string& operation) override
 	{
-		//TODO: ADD HANDLING FOR MULTI_CHAR OPERATORS
 		int leftIndex = index - 1;
 		int rightIndex = index + operation.length();
 		int right;
