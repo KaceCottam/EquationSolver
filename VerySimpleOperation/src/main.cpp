@@ -1,5 +1,8 @@
 #include "Parser.hpp"
 #include <iostream>
+#include "Matrix.h"
+
+using std::string;
 
 class IntParser final : public Parser<int>
 {
@@ -129,7 +132,7 @@ protected:
 	{
 		const auto isNumber = [](char c)
 		{
-			return c >= '0' && c <= '9';
+			return c >= '0' && c <= '9' || c == '.';
 		};
 		for (auto i = 0; i < in.length(); i++)
 		{
@@ -157,11 +160,75 @@ public:
 };
 int main()
 {
-	DoubleParser parser;
-	std::string input = "sqrt(100^2+3)";
-	double output;
+	IntParser parser;
+	std::string input = "5*4-(30/2)^2+1992/7";
+	int output;
 	do
 	{
 		std::cout << input << std::endl;
 	} while (parser.Parse(input, output, IntParser::End) == IntParser::Working);
+
+	//string test = "[{1,2,3},{3,2,1},{5,6,7}]";
+	//Matrix m;
+
+	//m.setData(test);
+	////m.displayData();
+
+	////cout << m.getNumRows() << "x" << m.getNumCols();
+
+	//Matrix n(m);
+	////n.displayData();
+
+	//m.add(n);
+	//m.displayData();
+
+	//Matrix o(scalarMult(2, m));
+	//o.displayData();
+
+	/*string test1 = "[{1,2},{3,4},{5,6}]";
+	string test2 = "[{1,2,3,7},{4,5,6,8}]";*/
+
+	string test1 = "[{0,-1,2},{4,11,2}]";
+	string test2 = "[{3,-1},{1,2},{6,1}]";
+	string test3 = "[{1,3,5,9},{1,3,1,7},{4,3,9,7},{5,2,0,9}]";
+
+	Matrix mat1;
+	mat1.setData(test3);
+
+	cout << "determinant: " << calculateDeterminant(4, mat1);
+
+	/*Matrix mat1;
+	mat1.setData(test1);
+
+	Matrix mat2;
+	mat2.setData(test2);
+
+	Matrix mat3(crossProduct(mat1, mat2));
+
+	mat1.displayData();
+	cout << " * ";
+	mat2.displayData();
+	cout << " = ";
+	mat3.displayData();*/
+
+	//string str;
+	//if (argc > 1)
+	//{
+	//	str = argv[2];
+	//}
+	//else
+	//{
+	//	str = "1*4+(1*(2-62)+100)^2-30/(2^3+2*5)+100/20-30+60*2-5*100-(50-34*23)+70";
+	//}
+	//// BUG: parenthesis at beginning of string causes error
+	//// BUG: minus sign at beginning of string causes error
+	//int output;
+	//std::cout << str << std::endl;
+	//while (Parse(str, output, 1) == 0)
+	//{
+	//	std::cout << str << std::endl;
+	//}
+
+	return 0;
+
 }
