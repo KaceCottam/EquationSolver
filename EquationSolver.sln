@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EquationSolverExample1", "E
 		{B45E4977-E638-4F98-82A9-77981ABFEC16} = {B45E4977-E638-4F98-82A9-77981ABFEC16}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VerySimpleOperation", "VerySimpleOperation\VerySimpleOperation.vcxproj", "{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{7AE275B2-79B5-4E03-B7DA-71A4116C18DC}.Release|x64.Build.0 = Release|x64
 		{7AE275B2-79B5-4E03-B7DA-71A4116C18DC}.Release|x86.ActiveCfg = Release|Win32
 		{7AE275B2-79B5-4E03-B7DA-71A4116C18DC}.Release|x86.Build.0 = Release|Win32
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Debug|x64.ActiveCfg = Debug|x64
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Debug|x64.Build.0 = Debug|x64
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Debug|x86.ActiveCfg = Debug|Win32
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Debug|x86.Build.0 = Debug|Win32
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Release|x64.ActiveCfg = Release|x64
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Release|x64.Build.0 = Release|x64
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Release|x86.ActiveCfg = Release|Win32
+		{0A362278-B8A9-44E4-B0F1-5F991D43FEA1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
